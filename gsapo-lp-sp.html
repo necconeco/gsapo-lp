@@ -1,0 +1,2485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>Gサポ｜クリニック向けGoogle口コミ対策サービス</title>
+<meta name="description" content="星2〜3台・口コミ100件未満のクリニックへ。Googleの方針に沿って、削除申請・掲載状態の見直し・評価改善の可能性を確認します。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================
+   Reset & Base
+========================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  font-feature-settings: "palt";
+  color: var(--text);
+  background: #ffffff;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img, svg { max-width: 100%; display: block; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+a { color: inherit; text-decoration: none; }
+
+/* =========================================
+   Tokens
+========================================= */
+:root {
+  --primary: #2563eb;        /* メインブルー */
+  --primary-dark: #1d4ed8;
+  --primary-deep: #1e3a8a;
+  --navy: #0a1f5c;           /* CTAボタン濃紺 */
+  --navy-2: #0f2767;
+  --bg-tint: #eff6ff;        /* 薄いブルーBG */
+  --bg-tint-2: #f0f5ff;
+  --bg-card: #f8faff;
+  --line: #dbeafe;
+  --line-2: #c7d8f7;
+  --text: #1a2238;
+  --text-muted: #5b6478;
+  --text-light: #8c95a8;
+  --yellow: #fde047;
+  --yellow-deep: #facc15;
+  --orange-from: #ff9248;
+  --orange-to: #ff6b1a;
+  --red: #ef4444;
+  --red-bg: #fee2e2;
+  --green: #10b981;
+  --shadow-sm: 0 2px 6px rgba(30, 58, 138, 0.06);
+  --shadow-md: 0 6px 20px rgba(30, 58, 138, 0.08);
+  --shadow-lg: 0 14px 40px rgba(30, 58, 138, 0.12);
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+}
+
+/* =========================================
+   Layout
+========================================= */
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.section {
+  padding: 56px 24px;
+  position: relative;
+}
+.section--tint {
+  background: linear-gradient(180deg, #ffffff 0%, var(--bg-tint) 100%);
+}
+.section--tint-deep {
+  background: var(--bg-tint);
+}
+
+/* 濃紺反転セクション（重力強めの浮島） */
+.section--dark {
+  background:
+    radial-gradient(ellipse at top right, rgba(96, 165, 250, 0.18) 0%, transparent 60%),
+    linear-gradient(180deg, #0c1d4f 0%, #081538 100%);
+  color: #e6ecf8;
+  position: relative;
+}
+.section--dark::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+}
+.section--dark .tag {
+  background: rgba(96, 165, 250, 0.15);
+  color: #93c5fd;
+}
+.section--dark .s-title {
+  color: #fff;
+}
+.section--dark .s-title em {
+  background: linear-gradient(transparent 65%, var(--yellow) 65%);
+  color: var(--text);
+}
+.section--dark .s-lead {
+  color: #b8c5e0;
+}
+.section--dark .s-lead strong {
+  color: #fff;
+}
+.section--dark .deco-dots span {
+  background: #60a5fa;
+  opacity: 0.8;
+}
+
+/* dark内の問題リスト */
+.section--dark .problem-list li {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  backdrop-filter: blur(8px);
+}
+.section--dark .problem-list__icon {
+  color: #93c5fd;
+}
+.section--dark .problem-list__label {
+  color: #fff;
+}
+
+/* dark内のレビュー例カード */
+.section--dark .example-review__card {
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text);
+}
+.section--dark .example-review__card .example-review__name,
+.section--dark .example-review__card .example-review__text {
+  color: var(--text);
+}
+.section--dark .example-review__doctor {
+  background:
+    repeating-linear-gradient(45deg, rgba(96,165,250,0.15) 0 6px, rgba(96,165,250,0.05) 6px 12px);
+  border: 1px dashed rgba(96, 165, 250, 0.4);
+  color: #93c5fd;
+}
+
+/* dark内のサマリーボックス */
+.section--dark .summary-box {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  backdrop-filter: blur(8px);
+}
+.section--dark .summary-box__icon {
+  background: var(--yellow);
+  color: var(--text);
+}
+.section--dark .summary-box__text {
+  color: #fff;
+}
+.section--dark .summary-box__text strong {
+  color: var(--yellow);
+  background: none;
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* 共通：右上の装飾（ドット＋ブロブ） */
+.deco-corner {
+  position: absolute;
+  top: 0; right: 0;
+  width: 180px; height: 180px;
+  pointer-events: none;
+  overflow: hidden;
+}
+.deco-corner::before {
+  content: "";
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle at 30% 30%, rgba(37, 99, 235, 0.12), transparent 70%);
+  border-radius: 50%;
+}
+.deco-dots {
+  position: absolute;
+  top: 24px; right: 24px;
+  display: grid;
+  grid-template-columns: repeat(6, 6px);
+  gap: 8px;
+  opacity: 0.5;
+}
+.deco-dots span {
+  width: 4px; height: 4px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: block;
+}
+
+/* =========================================
+   Tag (セクション上のラベル)
+========================================= */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px 8px 14px;
+  background: var(--bg-tint);
+  border-radius: var(--radius-pill);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: 0.04em;
+}
+.tag svg {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+}
+
+/* =========================================
+   Section title
+========================================= */
+.s-title {
+  font-size: 26px;
+  line-height: 1.5;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin: 0 0 20px;
+  color: var(--text);
+}
+.s-title em {
+  font-style: normal;
+  background: linear-gradient(transparent 65%, var(--yellow) 65%);
+  padding: 0 2px;
+}
+.s-title .accent {
+  color: var(--primary);
+}
+.s-lead {
+  font-size: 15.5px;
+  line-height: 1.9;
+  color: var(--text-muted);
+  margin: 0 0 28px;
+}
+.s-lead strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.s-lead .underline {
+  background: linear-gradient(transparent 70%, var(--yellow) 70%);
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* =========================================
+   1. HERO
+========================================= */
+.hero {
+  position: relative;
+  padding: 20px 24px 36px;
+  background:
+    radial-gradient(ellipse at top right, #e0ecff 0%, transparent 60%),
+    linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
+  overflow: hidden;
+}
+.hero__target {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px 14px 6px 8px;
+  background: #fff;
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.hero__target-icon {
+  width: 28px; height: 28px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+.hero__target-icon svg { width: 14px; height: 14px; color: #fff; }
+.hero__target-label {
+  background: var(--primary);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-right: 6px;
+}
+
+.hero__title {
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  margin: 8px 0 0;
+  position: relative;
+  z-index: 2;
+}
+.hero__title-big {
+  display: inline-block;
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin: 6px 0 4px;
+  position: relative;
+}
+.hero__title-big::after {
+  content: "";
+  position: absolute;
+  left: -4px; right: -4px;
+  bottom: 2px; height: 12px;
+  background: var(--yellow);
+  z-index: -1;
+}
+.hero__title-sub {
+  display: block;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.35;
+  margin-top: 10px;
+  letter-spacing: 0.01em;
+}
+.hero__title-sub .q {
+  color: var(--primary);
+  font-size: 36px;
+  font-weight: 900;
+  vertical-align: -2px;
+  margin-left: 2px;
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+}
+
+/* スパーク装飾 */
+.spark {
+  display: inline-block;
+  width: 28px; height: 28px;
+  position: relative;
+  vertical-align: top;
+}
+.spark::before, .spark::after {
+  content: "";
+  position: absolute;
+  background: var(--primary);
+  border-radius: 2px;
+}
+.spark::before {
+  width: 3px; height: 12px;
+  top: 0; left: 12px;
+  transform: rotate(-20deg);
+}
+.spark::after {
+  width: 3px; height: 12px;
+  top: 4px; left: 4px;
+  transform: rotate(-50deg);
+}
+
+.hero__visual {
+  position: relative;
+  width: 100%;
+  margin: 20px 0 16px;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero__visual > * {
+  pointer-events: auto;
+}
+.hero__photo {
+  width: 55%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.hero__review-card {
+  position: absolute;
+  bottom: 20px;
+  left: 8px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px 14px 10px;
+  box-shadow: var(--shadow-lg);
+  width: 184px;
+  z-index: 3;
+}
+.hero__review-card::after {
+  content: "";
+  position: absolute;
+  bottom: -10px; right: 24px;
+  width: 0; height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 12px solid #fff;
+  filter: drop-shadow(0 4px 4px rgba(30,58,138,0.06));
+}
+.hero__review-google {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+.hero__review-google span:nth-child(1) { color: #4285F4; }
+.hero__review-google span:nth-child(2) { color: #EA4335; }
+.hero__review-google span:nth-child(3) { color: #FBBC05; }
+.hero__review-google span:nth-child(4) { color: #4285F4; }
+.hero__review-google span:nth-child(5) { color: #34A853; }
+.hero__review-google span:nth-child(6) { color: #EA4335; }
+.hero__review-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.hero__review-score {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+}
+.hero__review-stars {
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+.hero__review-stars .filled { color: #FFA500; }
+.hero__review-stars .empty { color: #d1d5db; }
+.hero__review-count {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.hero__bubble {
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 14px 10px 12px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 3;
+}
+.hero__bubble-icon {
+  width: 24px; height: 24px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 900;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.hero__bubble-text {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* スパーク3個 */
+.hero__sparks {
+  position: absolute;
+  bottom: -10px;
+  right: -8px;
+  width: 30px;
+  height: 30px;
+}
+.hero__sparks::before,
+.hero__sparks::after {
+  content: "";
+  position: absolute;
+  width: 3px; height: 8px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+.hero__sparks::before {
+  top: 4px; right: 12px;
+  transform: rotate(20deg);
+}
+.hero__sparks::after {
+  top: 8px; right: 4px;
+  transform: rotate(50deg);
+}
+
+.hero__lead {
+  margin: 0 0 20px;
+  position: relative;
+  z-index: 2;
+}
+.hero__lead p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--text);
+  margin: 0 0 10px;
+}
+.hero__lead .highlight {
+  background: linear-gradient(transparent 70%, var(--yellow) 70%);
+  font-weight: 700;
+}
+
+.hero__info {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg-tint);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  margin-bottom: 28px;
+}
+.hero__info-icon {
+  width: 36px; height: 36px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hero__info-icon svg { width: 18px; height: 18px; color: #fff; }
+.hero__info-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text);
+  font-weight: 500;
+}
+.hero__info-text strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* =========================================
+   CTA Buttons
+========================================= */
+.cta-orange {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: linear-gradient(180deg, var(--orange-from), var(--orange-to));
+  border-radius: var(--radius-pill);
+  padding: 20px 24px;
+  box-shadow: 0 8px 20px rgba(255, 107, 26, 0.35), inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+.cta-orange:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px rgba(255, 107, 26, 0.3);
+}
+.cta-orange__badge {
+  flex-shrink: 0;
+  width: 64px; height: 64px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange-to);
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 1;
+  margin-right: 12px;
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.05);
+}
+.cta-orange__badge small {
+  font-size: 9px;
+  font-weight: 700;
+  margin-top: 3px;
+  color: var(--text);
+}
+.cta-orange__arrow {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: #fff;
+  color: var(--orange-to);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  margin-right: 10px;
+}
+.cta-orange__text {
+  color: #fff;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+.cta-orange__chev {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  color: #fff;
+  margin-left: 10px;
+}
+
+.cta-note {
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--text-muted);
+  text-align: left;
+  padding-left: 18px;
+  text-indent: -18px;
+}
+.cta-note .lock {
+  display: inline-block;
+  width: 12px; height: 12px;
+  margin-right: 4px;
+  vertical-align: -1px;
+  color: var(--text-light);
+}
+.cta-note .small {
+  display: block;
+  text-align: center;
+  margin-top: 6px;
+  color: var(--text-light);
+  text-indent: 0;
+  padding-left: 0;
+}
+
+/* 濃紺CTA */
+.cta-navy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: linear-gradient(180deg, #11286b, var(--navy));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 8px 18px rgba(10, 31, 92, 0.3);
+  transition: transform 0.2s;
+}
+.cta-navy:active { transform: translateY(1px); }
+.cta-navy svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* =========================================
+   3 worry icons
+========================================= */
+.worries {
+  margin-top: 32px;
+  background: linear-gradient(180deg, transparent, var(--bg-tint));
+  border-radius: var(--radius-lg);
+  padding: 24px 16px 8px;
+  border: 1px solid var(--line);
+}
+.worries__heading {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 20px;
+  color: var(--text);
+  position: relative;
+}
+.worries__heading::before,
+.worries__heading::after {
+  content: "";
+  display: inline-block;
+  width: 2px; height: 14px;
+  background: var(--primary);
+  vertical-align: middle;
+  margin: 0 12px;
+}
+.worries__heading::before { transform: rotate(-15deg); }
+.worries__heading::after { transform: rotate(15deg); }
+.worries__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  position: relative;
+}
+.worries__grid::before,
+.worries__grid::after {
+  content: "";
+  position: absolute;
+  top: 8px; bottom: 8px;
+  width: 1px;
+  background: var(--line-2);
+  border-left: 1px dashed var(--line-2);
+  background: transparent;
+}
+.worries__grid::before { left: 33.33%; }
+.worries__grid::after { left: 66.66%; }
+.worry {
+  text-align: center;
+  padding: 8px 4px;
+}
+.worry__icon {
+  width: 56px; height: 56px;
+  margin: 0 auto 10px;
+  background: var(--bg-tint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+.worry__icon svg { width: 26px; height: 26px; }
+.worry__text {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+/* =========================================
+   2. 対象クリニック
+========================================= */
+.checklist-section { background: #fff; }
+.badge-bordered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #fff;
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 16px;
+  margin: 0 auto 24px;
+  max-width: 320px;
+  text-align: center;
+}
+.badge-bordered svg { width: 18px; height: 18px; color: var(--yellow-deep); fill: currentColor; }
+
+.checklist {
+  list-style: none;
+  margin: 28px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 8px 0;
+}
+.checklist__check {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: var(--bg-tint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.checklist__check svg { width: 16px; height: 16px; }
+.checklist__label {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--text);
+}
+.note-center {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text-muted);
+  margin: 24px 0 28px;
+}
+
+/* =========================================
+   3. 予約直前の判断材料
+========================================= */
+.phone-mockup {
+  position: relative;
+  margin: 28px 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.phone {
+  flex-shrink: 0;
+  width: 156px;
+  background: #fff;
+  border-radius: 28px;
+  padding: 18px 8px 12px;
+  border: 6px solid #1a2238;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+.phone::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 56px; height: 12px;
+  background: #1a2238;
+  border-radius: 0 0 10px 10px;
+  z-index: 1;
+}
+.phone__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--text);
+  padding: 14px 6px 8px;
+}
+.phone__title {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 6px 4px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.phone__sub {
+  font-size: 9px;
+  color: var(--text-muted);
+  padding: 2px 6px 6px;
+}
+.phone__rating {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 6px 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  border-bottom: 1px solid #e5e7eb;
+}
+.phone__rating small {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.phone__review {
+  display: flex;
+  gap: 8px;
+  padding: 8px 6px;
+  border-bottom: 1px solid #f3f4f6;
+}
+.phone__avatar {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.phone__avatar.gray { background: #d1d5db; }
+.phone__avatar.green { background: #34A853; }
+.phone__avatar.blue { background: #4285F4; }
+.phone__review-body {
+  flex: 1;
+  min-width: 0;
+}
+.phone__review-stars {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  margin-bottom: 2px;
+}
+.phone__review-stars .stars { letter-spacing: 0; color: #FFA500; }
+.phone__review-stars .stars .e { color: #d1d5db; }
+.phone__review-stars .date { color: var(--text-muted); font-size: 8px; }
+.phone__review-text {
+  font-size: 9px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.trust-circle {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+.trust-circle__ring {
+  width: 116px; height: 116px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, #fff 78%, transparent 79% 100%),
+    conic-gradient(var(--primary) 81%, #dce5fa 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12);
+}
+.trust-circle__label {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text);
+}
+.trust-circle__number {
+  font-family: 'Inter', sans-serif;
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  margin-top: 4px;
+  letter-spacing: -0.02em;
+}
+.trust-circle__number small { font-size: 14px; margin-left: 2px; }
+.trust-circle__source {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+.trust-circle__sparkle {
+  position: absolute;
+  top: 0; right: -4px;
+  width: 18px; height: 18px;
+  color: var(--primary);
+}
+
+.concern-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 28px 0 24px;
+}
+.concern {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.concern__icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  color: var(--primary);
+}
+.concern__text {
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--text);
+}
+.alert-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-tint);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+}
+.alert-box__icon {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  color: var(--primary);
+}
+.alert-box__text {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--text);
+  font-weight: 500;
+}
+.alert-box__text strong {
+  color: var(--primary);
+  font-weight: 700;
+  background: linear-gradient(transparent 70%, var(--yellow) 70%);
+}
+
+/* =========================================
+   4. 反論できない構造
+========================================= */
+.problem-list {
+  list-style: none;
+  margin: 28px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.problem-list li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+}
+.problem-list__icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  color: var(--primary);
+}
+.problem-list__label {
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.example-review {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin: 24px 0;
+}
+.example-review__card {
+  flex: 1;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--line);
+}
+.example-review__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.example-review__avatar {
+  width: 28px; height: 28px;
+  background: #d1d5db;
+  border-radius: 50%;
+  position: relative;
+}
+.example-review__avatar::after {
+  content: "";
+  position: absolute;
+  bottom: 4px; left: 4px; right: 4px;
+  height: 3px;
+  background: #9ca3af;
+  border-radius: 2px;
+}
+.example-review__name {
+  font-size: 12px;
+  font-weight: 700;
+}
+.example-review__rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.example-review__rating .stars { color: #FFA500; font-size: 12px; letter-spacing: 1px; }
+.example-review__rating .stars .e { color: #d1d5db; }
+.example-review__rating .score {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+.example-review__text {
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.example-review__reply-tag {
+  display: inline-block;
+  background: var(--bg-tint);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.example-review__reply {
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.example-review__doctor {
+  width: 110px;
+  flex-shrink: 0;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.summary-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg-tint);
+  border-radius: var(--radius);
+  padding: 18px 14px;
+  margin-top: 24px;
+}
+.summary-box__icon {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yellow-deep);
+}
+.summary-box__icon svg { width: 22px; height: 22px; }
+.summary-box__text {
+  font-size: 14.5px;
+  line-height: 1.75;
+  font-weight: 500;
+  color: var(--text);
+}
+.summary-box__text strong {
+  color: var(--primary);
+  font-weight: 700;
+  background: linear-gradient(transparent 70%, var(--yellow) 70%);
+}
+
+/* =========================================
+   5. Google公式の方針
+========================================= */
+.quote-box {
+  background: var(--bg-tint);
+  border-radius: var(--radius);
+  padding: 22px 18px 20px;
+  margin: 24px 0 20px;
+  position: relative;
+}
+.quote-box__tag {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  position: absolute;
+  top: -10px; left: 16px;
+}
+.quote-box__text {
+  display: flex;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.75;
+  color: var(--text);
+}
+.quote-box__text::before {
+  content: "“";
+  font-family: 'Inter', serif;
+  font-size: 36px;
+  line-height: 0.7;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.compare-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.compare-card__icon {
+  flex-shrink: 0;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.compare-card__icon.red { background: #fef2f2; color: var(--red); }
+.compare-card__icon.blue { background: var(--bg-tint); color: var(--primary); }
+.compare-card__icon svg { width: 28px; height: 28px; }
+.compare-card__body {
+  flex: 1;
+  min-width: 0;
+}
+.compare-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+.compare-card__bar {
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  position: relative;
+}
+.compare-card__bar-avatar {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #d1d5db;
+  flex-shrink: 0;
+}
+.compare-card__bar-stars {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: #d1d5db;
+}
+.compare-card__bar-stars .filled.red { color: var(--red); }
+.compare-card__bar-stars .filled.yellow { color: #FFA500; }
+.compare-card__bar-line {
+  flex: 1;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+}
+.compare-card__bar-mark {
+  flex-shrink: 0;
+}
+.compare-card__bar-mark.red {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 900;
+}
+.compare-card__bar-mark.blue {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+}
+.compare-card__arrow {
+  font-size: 16px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.compare-card__result {
+  flex-shrink: 0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  min-width: 70px;
+}
+.compare-card__result.red { background: #fef2f2; color: var(--red); }
+.compare-card__result.blue { background: var(--bg-tint); color: var(--primary); }
+.compare-card__result svg { width: 16px; height: 16px; margin: 0 auto 2px; display: block; }
+
+.bottom-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg-tint);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+  margin-top: 16px;
+}
+.bottom-info__icon {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+.bottom-info__icon svg { width: 22px; height: 22px; }
+.bottom-info__text {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--text);
+}
+.bottom-info__text strong { font-weight: 700; }
+
+/* =========================================
+   6. ご提案できること
+========================================= */
+.service-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.service-card__icon {
+  flex-shrink: 0;
+  width: 64px; height: 64px;
+  background: var(--bg-tint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+.service-card__icon svg { width: 36px; height: 36px; }
+.service-card__body { flex: 1; min-width: 0; }
+.service-card__num-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.service-card__num {
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.service-card__num small {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--line-2);
+  margin-right: 2px;
+  letter-spacing: 0;
+}
+.service-card__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+.service-card__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+.service-card__desc {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--line-2);
+  padding-top: 6px;
+}
+
+/* =========================================
+   7. MEO比較
+========================================= */
+.meo-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+  margin-bottom: 14px;
+}
+.meo-card__icon {
+  flex-shrink: 0;
+  width: 60px; height: 60px;
+  background: var(--bg-tint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  align-self: flex-start;
+}
+.meo-card__icon svg { width: 32px; height: 32px; }
+.meo-card__body { flex: 1; min-width: 0; }
+.meo-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+.meo-card__title.accent { color: var(--primary); }
+.meo-card__list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  font-size: 14.5px;
+  color: var(--text);
+}
+.meo-card__list li {
+  position: relative;
+  padding-left: 14px;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.meo-card__list li::before {
+  content: "";
+  position: absolute;
+  left: 2px; top: 9px;
+  width: 5px; height: 5px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+.meo-card__bottom {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--bg-tint);
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.warning-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fef2f2;
+  border-radius: var(--radius);
+  padding: 14px;
+  margin: 16px 0;
+}
+.warning-banner__icon {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  color: var(--red);
+}
+.warning-banner__text {
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.target-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-tint);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+  margin-top: 16px;
+}
+.target-banner__icon {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  color: var(--primary);
+}
+.target-banner__text {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text);
+}
+.target-banner__text .underline {
+  background: linear-gradient(transparent 75%, var(--yellow) 75%);
+  font-weight: 700;
+}
+
+/* =========================================
+   8. 流れ
+========================================= */
+.flow {
+  margin: 28px 0;
+}
+.flow-step {
+  display: flex;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  align-items: center;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+.flow-step__num {
+  position: absolute;
+  top: 14px; left: 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0;
+}
+.flow-step__icon {
+  flex-shrink: 0;
+  width: 64px; height: 64px;
+  background: var(--bg-tint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  margin-left: 36px;
+}
+.flow-step__icon svg { width: 36px; height: 36px; }
+.flow-step__body { flex: 1; min-width: 0; }
+.flow-step__title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  border-bottom: 1px dashed var(--line-2);
+  padding-bottom: 6px;
+}
+.flow-step__desc {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+.flow-arrow {
+  text-align: center;
+  margin: 8px 0;
+  color: var(--primary);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.consider-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin: 16px 0 24px;
+  background: #fff;
+}
+.consider-box__icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  color: var(--primary);
+}
+.consider-box__text {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+/* =========================================
+   9. 院長の心の負荷
+========================================= */
+.empathy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 24px 0;
+}
+.empathy-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+}
+.empathy-item__icon {
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  background: var(--bg-tint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+.empathy-item__icon svg { width: 22px; height: 22px; }
+.empathy-item__text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.empathy-illust {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  display: block;
+  margin: 16px auto;
+  object-fit: contain;
+}
+
+.empathy-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg-tint);
+  border-radius: var(--radius);
+  padding: 18px 14px;
+}
+.empathy-summary__icon {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+.empathy-summary__icon svg { width: 22px; height: 22px; }
+.empathy-summary__text {
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.75;
+  color: var(--text);
+}
+.empathy-summary__text .accent {
+  color: var(--primary);
+}
+
+/* =========================================
+   10. 最後に
+========================================= */
+.trust-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 24px 0 20px;
+}
+.trust-card {
+  background: var(--bg-tint);
+  border-radius: var(--radius);
+  padding: 20px 12px;
+  text-align: center;
+}
+.trust-card__icon {
+  width: 48px; height: 48px;
+  margin: 0 auto 10px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+.trust-card__icon svg { width: 26px; height: 26px; }
+.trust-card__text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.55;
+}
+
+.cta-final-note {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 12px;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+
+/* マイクロコピー：CTAの踏みづらさを下げる小さな声 */
+.micro-pre {
+  text-align: center;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 16px 0 12px;
+  letter-spacing: 0.02em;
+}
+.micro-pre::before,
+.micro-pre::after {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  background: var(--line-2);
+  vertical-align: middle;
+  margin: 0 10px;
+}
+.micro-post {
+  text-align: center;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 14px 0 0;
+  font-style: normal;
+}
+.micro-post strong {
+  color: var(--text);
+  font-weight: 700;
+  background: linear-gradient(transparent 75%, rgba(253, 224, 71, 0.5) 75%);
+  padding: 0 2px;
+}
+
+/* =========================================
+   Animations
+========================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.section, .hero { animation: fadeUp 0.6s ease both; }
+
+/* =========================================
+   Footer
+========================================= */
+.footer {
+  text-align: center;
+  padding: 32px 24px 40px;
+  font-size: 11px;
+  color: var(--text-light);
+  background: #fff;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ========================================
+     1. HERO
+======================================== -->
+<section class="hero">
+  <div class="hero__target">
+    <span class="hero__target-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/></svg>
+    </span>
+    <span class="hero__target-label">対象</span>
+    星2〜3台・口コミ100件未満のクリニックへ
+  </div>
+
+  <h1 class="hero__title">
+    Google口コミの<br>
+    <span class="hero__title-big">低評価</span>
+    <span class="hero__title-sub">放置していませんか<span class="q">？</span></span>
+  </h1>
+
+  <div class="hero__lead">
+    <p>口コミ評価は、<br><span class="highlight">来院前に最も見られる判断材料のひとつ。</span></p>
+    <p>低評価が増える前に、<br>改善できる余地があるか確認できます。</p>
+  </div>
+
+  <div class="hero__visual">
+    <img src="hero-doctor.png" alt="" class="hero__photo">
+    <div class="hero__review-card">
+      <div class="hero__review-google">
+        <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+      </div>
+      <div class="hero__review-rating">
+        <span class="hero__review-score">2.8</span>
+        <span class="hero__review-stars">
+          <span class="filled">★★★</span><span class="empty">★★</span>
+        </span>
+      </div>
+      <div class="hero__review-count">口コミ 38 件</div>
+    </div>
+    <div class="hero__bubble">
+      <span class="hero__bubble-icon">!</span>
+      <span class="hero__bubble-text">患者さんは来院前に<br>口コミを見ています</span>
+      <span class="hero__sparks"></span>
+    </div>
+  </div>
+
+  <a href="#contact" class="cta-orange">
+    <span class="cta-orange__text">口コミ改善の余地を無料で確認する</span>
+    <svg class="cta-orange__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+  </a>
+
+  <p class="cta-note">
+    <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    フォーム送信後、状況確認のご連絡を差し上げます。<br>
+    無理なご案内は行いません。
+    <span class="small">※ご相談の段階で費用は発生しません。</span>
+  </p>
+
+  <div class="hero__info">
+    <div class="hero__info-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/>
+        <path d="M9 12l2 2 4-4"/>
+      </svg>
+    </div>
+    <p class="hero__info-text">
+      削除申請・掲載状態の見直し・評価改善の可能性を、<br>
+      <strong>Googleの方針</strong>に沿って確認します。
+    </p>
+  </div>
+
+  <!-- 3 worry icons -->
+  <div class="worries">
+    <div class="worries__heading">こんなお悩みはありませんか？</div>
+    <div class="worries__grid">
+      <div class="worry">
+        <div class="worry__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+        <div class="worry__text">来院前に必ず<br>見られる口コミ</div>
+      </div>
+      <div class="worry">
+        <div class="worry__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 7 9 13 13 9 21 17"/><polyline points="14 17 21 17 21 10"/></svg>
+        </div>
+        <div class="worry__text">評価が低いほど<br>選ばれにくい</div>
+      </div>
+      <div class="worry">
+        <div class="worry__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div class="worry__text">改善できる余地を<br>無料でチェック</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     2. 対象クリニック
+======================================== -->
+<section class="section section--tint">
+  <div class="deco-corner"></div>
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-7h6v7"/></svg>
+    対象クリニック
+  </div>
+  <h2 class="s-title">このようなクリニックは、対策の余地があります。</h2>
+
+  <div class="badge-bordered">
+    <svg viewBox="0 0 24 24"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.51 5.79 21l2.39-7.15L2 9.36h7.61L12 2z"/></svg>
+    星2〜3台 / 口コミ100件未満
+  </div>
+
+  <p class="s-lead" style="text-align: center;">
+    星2〜3台・口コミ100件未満のクリニックでは、<br>
+    1件の低評価が全体評価に大きく影響します。
+  </p>
+
+  <ul class="checklist">
+    <li>
+      <span class="checklist__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>
+      <span class="checklist__label">Google評価が星2〜3台</span>
+    </li>
+    <li>
+      <span class="checklist__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>
+      <span class="checklist__label">口コミ件数が100件未満</span>
+    </li>
+    <li>
+      <span class="checklist__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>
+      <span class="checklist__label">事実と異なる口コミがある</span>
+    </li>
+    <li>
+      <span class="checklist__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>
+      <span class="checklist__label">患者情報に触れられず反論しづらい</span>
+    </li>
+    <li>
+      <span class="checklist__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>
+      <span class="checklist__label">予約や採用への影響を感じる</span>
+    </li>
+    <li>
+      <span class="checklist__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg></span>
+      <span class="checklist__label">良い声が口コミに反映されていない</span>
+    </li>
+  </ul>
+
+  <p class="note-center">
+    ※口コミ件数が少ないほど、<br>
+    1件の低評価の影響は大きくなります。
+  </p>
+
+  <a href="#contact" class="cta-navy">
+    まずは状況確認だけでもご相談ください
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+  </a>
+</section>
+
+<!-- ========================================
+     3. 予約直前の判断材料
+======================================== -->
+<section class="section">
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/><polyline points="8 14 11 17 16 11"/></svg>
+    予約直前の判断材料
+  </div>
+
+  <h2 class="s-title">
+    口コミは、来院前の<br>
+    『最後の判断材料』<br>です。
+  </h2>
+
+  <p class="s-lead">
+    患者さんは、来院前にGoogleマップの口コミを確認します。<br>
+    クリニックの場合、口コミは評判ではなく、<br>
+    <span class="underline">来院前の不安に直結</span>します。
+  </p>
+
+  <div class="phone-mockup">
+    <div class="phone">
+      <div class="phone__title">○○□クリニック</div>
+      <div class="phone__sub">クリニック・內科・皮膚科</div>
+      <div class="phone__rating">2.9 <small>4(45)</small></div>
+      <div class="phone__review">
+        <span class="phone__avatar gray"></span>
+        <div class="phone__review-body">
+          <div class="phone__review-stars">
+            <span class="stars">★★<span class="e">★★★</span></span>
+            <span class="date">2週間前</span>
+          </div>
+          <div class="phone__review-text">説明が少なく不安でした。</div>
+        </div>
+      </div>
+      <div class="phone__review">
+        <span class="phone__avatar green"></span>
+        <div class="phone__review-body">
+          <div class="phone__review-stars">
+            <span class="stars">★★★<span class="e">★★</span></span>
+            <span class="date">1か月前</span>
+          </div>
+          <div class="phone__review-text">待ち時間が気になりました。</div>
+        </div>
+      </div>
+      <div class="phone__review">
+        <span class="phone__avatar blue"></span>
+        <div class="phone__review-body">
+          <div class="phone__review-stars">
+            <span class="stars">★★<span class="e">★★★</span></span>
+            <span class="date">2か月前</span>
+          </div>
+          <div class="phone__review-text">対応に不安を感じました。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-circle">
+      <div class="trust-circle__ring">
+        <svg class="trust-circle__sparkle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5L12 2z"/></svg>
+        <div class="trust-circle__label">口コミの<br>信頼度</div>
+        <div class="trust-circle__number">81<small>%</small></div>
+      </div>
+      <div class="trust-circle__source">※B-team社 Gサポページより</div>
+    </div>
+  </div>
+
+  <div class="concern-grid">
+    <div class="concern">
+      <svg class="concern__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><polyline points="9 12 11 14 15 10"/></svg>
+      <span class="concern__text">ここに相談して<br>大丈夫か</span>
+    </div>
+    <div class="concern">
+      <svg class="concern__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/><path d="M9 12v3M15 12v3"/></svg>
+      <span class="concern__text">先生や受付の<br>対応はどうか</span>
+    </div>
+    <div class="concern">
+      <svg class="concern__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 16s1-2 3-2 3 2 3 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      <span class="concern__text">嫌な思いを<br>しないか</span>
+    </div>
+    <div class="concern">
+      <svg class="concern__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="8" r="2.5"/><path d="M3 20v-1a5 5 0 0 1 12 0v1M14 20v-1a4 4 0 0 1 7 0v1"/></svg>
+      <span class="concern__text">家族を連れて<br>行けるか</span>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    <svg class="alert-box__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/><polygon points="3 21 21 21" stroke-width="0" fill="currentColor"/><path d="M5 5l1 2M19 5l-1 2"/><polygon points="3 19 6 16 9 18 12 14" fill="currentColor" stroke-width="0"/></svg>
+    <p class="alert-box__text">
+      星2〜3台のままだと、<br>
+      <strong>予約直前で離脱</strong>されている可能性があります。
+    </p>
+  </div>
+</section>
+
+<!-- ========================================
+     4. 反論できない構造
+======================================== -->
+<section class="section section--dark">
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+    クリニックという業態の特殊性
+  </div>
+
+  <h2 class="s-title">
+    クリニックの<br>
+    口コミ対策が難しいのは、<br>
+    『反論できない』構造が<br>
+    あるからです。
+  </h2>
+
+  <p class="s-lead">
+    飲食店や美容室であれば、ある程度の事情説明は<br>
+    できることもあります。<br>
+    しかしクリニックでは、患者さんの個人情報や<br>
+    診療内容に触れることができません。
+  </p>
+
+  <ul class="problem-list">
+    <li>
+      <svg class="problem-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
+      <span class="problem-list__label">事実と異なる内容でも、詳しく反論できない</span>
+    </li>
+    <li>
+      <svg class="problem-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/></svg>
+      <span class="problem-list__label">感情的な投稿にも、慎重な返信しかできない</span>
+    </li>
+    <li>
+      <svg class="problem-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/></svg>
+      <span class="problem-list__label">スタッフ名に近い表現があっても、表で扱いづらい</span>
+    </li>
+    <li>
+      <svg class="problem-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span class="problem-list__label">良い患者さんほど、わざわざ口コミを書かない</span>
+    </li>
+    <li>
+      <svg class="problem-list__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h6M9 17h4"/></svg>
+      <span class="problem-list__label">医療広告ガイドラインにより、自院からの発信に制約がある</span>
+    </li>
+  </ul>
+
+  <div class="example-review">
+    <div class="example-review__card">
+      <div class="example-review__head">
+        <div class="example-review__avatar"></div>
+        <div class="example-review__name">○○クリニック</div>
+      </div>
+      <div class="example-review__rating">
+        <span class="stars">★★<span class="e">★★★</span></span>
+        <span class="score">2.0</span>
+      </div>
+      <p class="example-review__text">受付の対応が冷たく、説明も不十分でした。もう行きません。</p>
+      <span class="example-review__reply-tag">クリニックからの返信</span>
+      <p class="example-review__reply">個人情報および診療内容に関わるため、詳細なご説明は控えさせていただきます。ご理解のほどお願いいたします。</p>
+    </div>
+    <img src="doctor-worried.png" alt="" class="example-review__doctor">
+  </div>
+
+  <div class="summary-box">
+    <span class="summary-box__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.7.7 1 1.5 1 2.3v1h6v-1c0-.8.3-1.6 1-2.3A7 7 0 0 0 12 2z"/></svg>
+    </span>
+    <p class="summary-box__text">
+      つまり、クリニックの口コミ問題は、<br>
+      『返信を頑張れば<strong>解決する</strong>』だけでは足りないケースがあります。
+    </p>
+  </div>
+</section>
+
+<!-- ========================================
+     5. Google公式の方針
+======================================== -->
+<section class="section">
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><polyline points="9 12 11 14 15 10"/></svg>
+    Google公式の方針に沿って
+  </div>
+
+  <h2 class="s-title">
+    Googleの方針に沿って、<br>
+    削除対象の可能性を<br>
+    確認します。
+  </h2>
+
+  <p class="s-lead">
+    Googleでは、ポリシー違反のクチコミは<br>
+    削除対象となります。<br>
+    一方、準拠しているクチコミは、<br>
+    否定的でも削除されません。
+  </p>
+
+  <div class="quote-box">
+    <span class="quote-box__tag">Google公式</span>
+    <p class="quote-box__text">
+      ポリシー違反のクチコミは削除。<br>
+      準拠しているクチコミは削除されません。
+    </p>
+  </div>
+
+  <!-- ポリシー違反 -->
+  <div class="compare-card">
+    <div class="compare-card__icon red">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+    </div>
+    <div class="compare-card__body">
+      <div class="compare-card__title">ポリシー違反</div>
+      <div class="compare-card__bar">
+        <span class="compare-card__bar-avatar"></span>
+        <span class="compare-card__bar-stars"><span class="filled red">★</span>★★★★</span>
+        <span class="compare-card__bar-line"></span>
+        <span class="compare-card__bar-mark red">!</span>
+      </div>
+    </div>
+    <div class="compare-card__arrow">→</div>
+    <div class="compare-card__result red">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      削除対象
+    </div>
+  </div>
+
+  <!-- ポリシー準拠 -->
+  <div class="compare-card">
+    <div class="compare-card__icon blue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><polyline points="9 12 11 14 15 10"/></svg>
+    </div>
+    <div class="compare-card__body">
+      <div class="compare-card__title">ポリシー準拠</div>
+      <div class="compare-card__bar">
+        <span class="compare-card__bar-avatar"></span>
+        <span class="compare-card__bar-stars"><span class="filled yellow">★</span>★★★★</span>
+        <span class="compare-card__bar-line"></span>
+        <span class="compare-card__bar-mark blue">✓</span>
+      </div>
+    </div>
+    <div class="compare-card__arrow">→</div>
+    <div class="compare-card__result blue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      否定的でも<br>削除されない
+    </div>
+  </div>
+
+  <div class="bottom-info">
+    <span class="bottom-info__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="11" cy="14" r="2"/><path d="M13 16l2 2"/></svg>
+    </span>
+    <p class="bottom-info__text">
+      <strong>すべての口コミを削除できるわけではありません。</strong><br>
+      だからこそ、削除申請や掲載状態の見直しの余地を確認します。
+    </p>
+  </div>
+</section>
+
+<!-- ========================================
+     6. ご提案できること
+======================================== -->
+<section class="section section--tint">
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h6M9 17h4"/><circle cx="16" cy="17" r="2.5"/></svg>
+    ご提案できること
+  </div>
+
+  <h2 class="s-title">
+    Gサポで、<br>
+    口コミ対策の余地を<br>
+    確認します。
+  </h2>
+
+  <p class="s-lead">
+    Gサポは、Googleビジネスプロフィールに<br>
+    特化した風評被害対策サービスです。<br>
+    現状に合わせて、対策の可能性を確認します。
+  </p>
+
+  <!-- 01 -->
+  <div class="service-card">
+    <div class="service-card__icon">
+      <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="20" height="14" rx="2"/><circle cx="9" cy="11" r="1.4" fill="currentColor"/><path d="M14 10h6M14 13h6"/><path d="M9 16h11"/><circle cx="22" cy="22" r="6"/><path d="M26 26l4 4"/><path d="M19 22h6M22 19v6" stroke-width="0"/><path d="M20 25l3-3"/></svg>
+    </div>
+    <div class="service-card__body">
+      <div class="service-card__num-row">
+        <span class="service-card__num"><small>0</small>1</span>
+        <span class="service-card__label">DELETE</span>
+      </div>
+      <h3 class="service-card__title">削除申請・掲載状態の見直し</h3>
+      <p class="service-card__desc">削除対象となる可能性がある口コミを精査します。</p>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="service-card">
+    <div class="service-card__icon">
+      <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="18" height="22" rx="2"/><path d="M11 3h8v4h-8z" fill="currentColor"/><polygon points="15,9 16.5,12 19.5,12 17,14 18,17 15,15 12,17 13,14 10.5,12 13.5,12" fill="#FFA500" stroke="#FFA500"/><circle cx="22" cy="22" r="5"/><path d="M22 19a3 3 0 0 0 0 6 3 3 0 0 0 0-6z" fill="currentColor"/></svg>
+    </div>
+    <div class="service-card__body">
+      <div class="service-card__num-row">
+        <span class="service-card__num"><small>0</small>2</span>
+        <span class="service-card__label">ADDITION</span>
+      </div>
+      <h3 class="service-card__title">評価改善の導線設計</h3>
+      <p class="service-card__desc">満足された患者さんの声が集まりやすい導線を整えます。</p>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="service-card">
+    <div class="service-card__icon">
+      <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="22" height="14" rx="1"/><path d="M14 20v3M10 23h8"/><polyline points="6 16 11 11 14 14 20 8"/><circle cx="26" cy="22" r="4"/><path d="M26 19v0M26 25v0M22 22h0M30 22h0" stroke-width="2.5"/></svg>
+    </div>
+    <div class="service-card__body">
+      <div class="service-card__num-row">
+        <span class="service-card__num"><small>0</small>3</span>
+        <span class="service-card__label">MANAGEMENT</span>
+      </div>
+      <h3 class="service-card__title">継続的な口コミ管理</h3>
+      <p class="service-card__desc">口コミ確認・返信運用・情報更新まで支援します。</p>
+    </div>
+  </div>
+
+  <div class="bottom-info" style="margin-top: 20px;">
+    <span class="bottom-info__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><polyline points="9 12 11 14 15 10"/></svg>
+    </span>
+    <p class="bottom-info__text">
+      <strong>3つの視点から、</strong><br>
+      <span style="background: linear-gradient(transparent 70%, var(--yellow) 70%); font-weight: 700;">現状に合った対策の可能性を確認します。</span>
+    </p>
+  </div>
+</section>
+
+<!-- ========================================
+     7. MEO対策との違い
+======================================== -->
+<section class="section">
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 8h14M7 8l2 8h6l2-8"/><circle cx="9" cy="20" r="2"/><circle cx="15" cy="20" r="2"/></svg>
+    一般的なMEO対策との違い
+  </div>
+
+  <h2 class="s-title">
+    口コミを増やすだけでは、低評価の印象は残ります。
+  </h2>
+
+  <p class="s-lead">
+    一般的なMEO対策は、良い口コミを増やす施策が中心です。<br>
+    一方、Gサポは悪い口コミへの対策と評価改善の両方から見直します。
+  </p>
+
+  <!-- 一般的なMEO対策 -->
+  <div class="meo-card">
+    <div class="meo-card__icon">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15v2l-3 1v-4l3 1z" fill="currentColor"/><path d="M5 15l16-7v16L5 17"/><path d="M21 13c1.5 0 3 1 3 3s-1.5 3-3 3"/><path d="M9 18v3a2 2 0 0 0 4 0v-2"/></svg>
+    </div>
+    <div class="meo-card__body">
+      <h3 class="meo-card__title">一般的なMEO対策</h3>
+      <ul class="meo-card__list">
+        <li>情報更新</li>
+        <li>投稿</li>
+        <li>口コミ返信</li>
+        <li>良い口コミ獲得支援</li>
+      </ul>
+      <div class="meo-card__bottom">良い口コミを増やす施策が中心</div>
+    </div>
+  </div>
+
+  <!-- Gサポ -->
+  <div class="meo-card">
+    <div class="meo-card__icon">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3L5 7v8c0 6 4.5 12 11 14 6.5-2 11-8 11-14V7l-11-4z"/><polyline points="11 16 14 19 21 12"/></svg>
+    </div>
+    <div class="meo-card__body">
+      <h3 class="meo-card__title accent">Gサポ</h3>
+      <ul class="meo-card__list">
+        <li>悪い口コミの確認</li>
+        <li>削除申請の余地確認</li>
+        <li>評価改善導線</li>
+        <li>継続管理</li>
+      </ul>
+      <div class="meo-card__bottom">悪い口コミ対策と評価改善の両方から設計</div>
+    </div>
+  </div>
+
+  <div class="warning-banner">
+    <svg class="warning-banner__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <p class="warning-banner__text">判断は「最も低評価な1件」に引っ張られやすい</p>
+  </div>
+
+  <div class="target-banner">
+    <svg class="target-banner__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+    <p class="target-banner__text">
+      Gサポは、悪い口コミへの対策と、良い評価を集める設計の<span class="underline">両方から</span>改善を目指します。
+    </p>
+  </div>
+</section>
+
+<!-- ========================================
+     8. ご相談の流れ
+======================================== -->
+<section class="section section--tint">
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 14 11 16 15 12"/></svg>
+    ご相談の流れ
+  </div>
+
+  <h2 class="s-title">
+    ご相談は、<br>
+    かんたん3ステップです。
+  </h2>
+
+  <div class="flow">
+    <div class="flow-step">
+      <span class="flow-step__num">01</span>
+      <div class="flow-step__icon">
+        <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="22" height="28" rx="2"/><path d="M12 12h12M12 18h12M12 24h8"/><circle cx="26" cy="26" r="5" fill="currentColor" stroke="none"/><polyline points="23 26 25.5 28.5 29 25" stroke="white" stroke-width="2.4"/></svg>
+      </div>
+      <div class="flow-step__body">
+        <h3 class="flow-step__title">フォーム送信</h3>
+        <p class="flow-step__desc">貴院名・口コミ状況・ご相談内容をお送りください。</p>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+
+    <div class="flow-step">
+      <span class="flow-step__num">02</span>
+      <div class="flow-step__icon">
+        <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="9"/><path d="M21 21l8 8"/><polygon points="11,10 12,12 14,12 12.5,13.5 13,16 11,14.5 9,16 9.5,13.5 8,12 10,12" fill="#FFA500" stroke="#FFA500"/></svg>
+      </div>
+      <div class="flow-step__body">
+        <h3 class="flow-step__title">口コミ状況の確認</h3>
+        <p class="flow-step__desc">評価・件数・低評価の内容を確認します。</p>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+
+    <div class="flow-step">
+      <span class="flow-step__num">03</span>
+      <div class="flow-step__icon">
+        <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="5" width="20" height="26" rx="2"/><path d="M13 4h8v4h-8z" fill="currentColor"/><path d="M11 14h4M11 19h4M11 24h4"/><polyline points="11.5 14 12.5 15 14 13.5" stroke-width="1.4"/><circle cx="22" cy="24" r="6" stroke-width="2"/><polyline points="19 24 21.5 26.5 25 23"/></svg>
+      </div>
+      <div class="flow-step__body">
+        <h3 class="flow-step__title">対策可能性のご案内</h3>
+        <p class="flow-step__desc">削除申請・掲載状態の見直し・評価改善の余地をご案内します。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="consider-box">
+    <svg class="consider-box__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <p class="consider-box__text">ご検討は、すべての情報をお受け取りになった後で構いません。</p>
+  </div>
+
+  <a href="#contact" class="cta-navy">
+    まずはフォーム送信からご相談ください。
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+  </a>
+</section>
+
+<!-- ========================================
+     9. 院長の心の負荷
+======================================== -->
+<section class="section">
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    院長の心の負荷
+  </div>
+
+  <h2 class="s-title">
+    院長ご自身が、<br>
+    いちばん見ている。
+  </h2>
+
+  <p class="s-lead">
+    低評価の口コミを、<br>
+    休診日の夜にふと開いてしまう。<br><br>
+    反論できない投稿に、<br>
+    頭の中だけで何度も反論している。<br><br>
+    その時間こそ、本来は<br>
+    診療や経営判断に使われるはずだったものです。
+  </p>
+
+  <div class="empathy-list">
+    <div class="empathy-item">
+      <span class="empathy-item__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/><path d="M14 14s-1 1-2 1-2-1-2-1"/><circle cx="9" cy="13" r="0.5" fill="currentColor"/><circle cx="15" cy="13" r="0.5" fill="currentColor"/></svg>
+      </span>
+      <span class="empathy-item__text">休診日に気になってしまう</span>
+    </div>
+    <div class="empathy-item">
+      <span class="empathy-item__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21V8a3 3 0 0 1 6 0c0-1.5 1-3 3-3s3 1.5 3 3-1 3-3 3 0 3 0 6-2 4-3 4H9z"/><circle cx="14" cy="11" r="1"/></svg>
+      </span>
+      <span class="empathy-item__text">頭の中で反論を繰り返す</span>
+    </div>
+    <div class="empathy-item">
+      <span class="empathy-item__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M5 17v-1a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v1"/><rect x="3" y="17" width="18" height="4" rx="1"/></svg>
+      </span>
+      <span class="empathy-item__text">本来の業務に<br>集中しにくい</span>
+    </div>
+  </div>
+
+  <img src="doctor-pc.png" alt="" class="empathy-illust">
+
+  <div class="empathy-summary">
+    <span class="empathy-summary__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><polyline points="9 12 11 14 15 10"/></svg>
+    </span>
+    <p class="empathy-summary__text">
+      口コミ対策は、その時間を<br>
+      <span class="accent">取り戻す</span>作業でもあります。
+    </p>
+  </div>
+</section>
+
+<!-- ========================================
+     10. 最後に - Final CTA
+======================================== -->
+<section class="section section--tint" id="contact">
+  <div class="deco-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="tag">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V3l14 5-14 5"/></svg>
+    最後に
+  </div>
+
+  <h2 class="s-title" style="text-align: center;">
+    低評価口コミは、<br>
+    放置しても自然には<br>
+    戻りにくいものです。
+  </h2>
+
+  <p class="s-lead" style="text-align: center;">
+    口コミ件数が100件未満の場合、<br>
+    1件の低評価が全体評価に与える影響は<br>
+    大きくなります。<br><br>
+    『消せるのか分からない』<br>
+    『問い合わせるほどなのか分からない』<br>
+    その段階でも大丈夫です。<br><br>
+    まずは、対策の余地があるかを<br>
+    確認するところから始められます。
+  </p>
+
+  <div class="trust-row">
+    <div class="trust-card">
+      <div class="trust-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-3a9 9 0 0 1 18 0v3"/><rect x="3" y="14" width="5" height="7" rx="1"/><rect x="16" y="14" width="5" height="7" rx="1"/><path d="M16 19c0 1 1 2 2 2"/></svg>
+      </div>
+      <div class="trust-card__text">相談無料</div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8a3 3 0 0 1 0-6c1.5 0 3 1.5 3 3 0-1.5 1.5-3 3-3a3 3 0 0 1 0 6"/><path d="M5 13l1 8 4-1 2 1 2-1 4 1 1-8"/><path d="M5 13s2-2 5-2 4 1 4 1 1-1 4-1 5 2 5 2"/></svg>
+      </div>
+      <div class="trust-card__text">無理なご案内は<br>行いません</div>
+    </div>
+  </div>
+
+  <a href="#" class="cta-navy">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="11" cy="14" r="2"/></svg>
+    貴院の口コミ状況を無料で確認する
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+  </a>
+  <div class="cta-final-note">フォーム送信のみ・ご相談無料</div>
+</section>
+
+<footer class="footer">
+  © Gサポ
+</footer>
+
+</div>
+</body>
+</html>
