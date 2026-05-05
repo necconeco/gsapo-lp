@@ -1605,13 +1605,18 @@ a { color: inherit; text-decoration: none; }
   color: var(--text);
 }
 
-.empathy-illust {
-  width: 100%;
-  max-width: 320px;
+.empathy-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.empathy-header__img {
+  width: 120px;
   height: auto;
-  display: block;
-  margin: 16px auto;
+  flex-shrink: 0;
   object-fit: contain;
+  margin-bottom: -8px;
 }
 
 .empathy-summary {
@@ -2379,10 +2384,13 @@ a { color: inherit; text-decoration: none; }
     院長の心の負荷
   </div>
 
-  <h2 class="s-title">
-    <em style="background: linear-gradient(transparent 65%, #ffdfb8 65%); font-style: normal; padding: 0 2px;">院長ご自身が、</em><br>
-    <em style="background: linear-gradient(transparent 65%, #ffdfb8 65%); font-style: normal; padding: 0 2px;">いちばん見ている。</em>
-  </h2>
+  <div class="empathy-header">
+    <h2 class="s-title" style="flex: 1; margin-bottom: 0;">
+      <em style="background: linear-gradient(transparent 65%, #ffdfb8 65%); font-style: normal; padding: 0 2px;">院長ご自身が、</em><br>
+      <em style="background: linear-gradient(transparent 65%, #ffdfb8 65%); font-style: normal; padding: 0 2px;">いちばん見ている。</em>
+    </h2>
+    <img src="doctor-pc.png" alt="" class="empathy-header__img">
+  </div>
 
   <p class="s-lead">
     低評価の口コミを、<br>
@@ -2413,8 +2421,6 @@ a { color: inherit; text-decoration: none; }
       <span class="empathy-item__text">本来の業務に<br>集中しにくい</span>
     </div>
   </div>
-
-  <img src="doctor-pc.png" alt="" class="empathy-illust">
 
   <div class="empathy-summary">
     <span class="empathy-summary__icon">
